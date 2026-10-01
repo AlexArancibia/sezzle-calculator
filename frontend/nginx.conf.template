@@ -1,0 +1,23 @@
+# Processed by the nginx image's envsubst at startup: only ${API_KEY} and
+# ${BACKEND_URL} are replaced; nginx variables such as $host are left alone.
+server {
+    listen 80;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Docker's DNS. Resolving the backend per request (through a variable) lets
+    # nginx start even if the backend is not up yet.
+    resolver 127.0.0.11 valid=30s ipv6=off;
+    set $backend "${BACKEND_URL}";
+
+    location /api/ {
+        proxy_pass $backend;
+        proxy_set_header Host $host;
+        # The browser never sees the key: nginx adds it when proxying.
+        proxy_set_header X-API-Key "${API_KEY}";
+    }
+
+    location / {
+        try_files $uri /index.html;
+    }
+}

@@ -1,0 +1,11 @@
+# dependencies and builds
+frontend/node_modules/
+frontend/dist/
+# coverage reports (regenerate with `make coverage`)
+frontend/coverage/
+backend/coverage.out
+backend/coverage.html
+# local env and OS files
+.env
+.DS_Store
+*.tsbuildinfo
